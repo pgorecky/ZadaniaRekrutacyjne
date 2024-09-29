@@ -55,4 +55,22 @@ public class TaskController {
         log.warn("Task with id: {} has been removed", id);
         return String.format("Task with id: %s deleted successfully", id);
     }
+
+    @PutMapping("/{id}")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public TaskDto updateTask(@PathVariable Long id, @Valid @RequestBody AddTaskRequest updatedTask) {
+        Task task = taskService.updateTask(id, updatedTask);
+        log.info("Task with id: {} has been updated", id);
+        return convertToTaskDto(task);
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public TaskDto partiallyUpdateTask(@PathVariable Long id, @RequestBody AddTaskRequest updatedTask) {
+        Task task = taskService.partiallyUpdateTask(id, updatedTask);
+        log.info("Task with id: {} has been partially updated", id);
+        return convertToTaskDto(task);
+    }
 }
