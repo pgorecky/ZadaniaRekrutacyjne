@@ -7,7 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.pgorecki.zadanie2.dto.UserDto;
 import org.pgorecki.zadanie2.model.User;
 import org.pgorecki.zadanie2.repository.UserSearchDao;
-import org.pgorecki.zadanie2.repository.UserSearchRequest;
+import org.pgorecki.zadanie2.dto.UserSearchRequest;
 import org.pgorecki.zadanie2.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,7 @@
-package org.pgorecki.zadanie2.repository;
+package org.pgorecki.zadanie2.dto;
 
 import lombok.AllArgsConstructor;
+import org.pgorecki.zadanie2.repository.SearchCriteria;
 
 import java.util.ArrayList;
 import java.util.List;
