@@ -45,10 +45,16 @@ public class TaskService {
     }
 
     private Task mapAddTaskRequestToTask(AddTaskRequest updatedTask, Task existingTask) {
-        existingTask.setTitle(updatedTask.title());
-        existingTask.setDescription(updatedTask.description());
-        existingTask.setStatus(updatedTask.status() != null ? updatedTask.status() : TaskStatus.SUBMITTED);
-        existingTask.setDeadline(updatedTask.deadline());
+        existingTask = Task.builder()
+                .title(updatedTask.title())
+                .description(updatedTask.description())
+                .status(updatedTask.status() != null ? updatedTask.status() : TaskStatus.SUBMITTED)
+                .deadline(updatedTask.deadline())
+                .assignedUsers(updatedTask.assignedUsers().isEmpty()
+                        ? existingTask.getAssignedUsers()
+                        : userService.getUsersByIds(updatedTask.assignedUsers()))
+                .build();
+
 
         if (!updatedTask.assignedUsers().isEmpty()) {
             List<User> assignedUsers = userService.getUsersByIds(updatedTask.assignedUsers());
