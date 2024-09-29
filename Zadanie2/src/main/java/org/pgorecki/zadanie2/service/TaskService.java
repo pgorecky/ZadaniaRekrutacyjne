@@ -45,20 +45,18 @@ public class TaskService {
     }
 
     private Task mapAddTaskRequestToTask(AddTaskRequest updatedTask, Task existingTask) {
-        existingTask = Task.builder()
-                .title(updatedTask.title())
-                .description(updatedTask.description())
-                .status(updatedTask.status() != null ? updatedTask.status() : TaskStatus.SUBMITTED)
-                .deadline(updatedTask.deadline())
-                .assignedUsers(updatedTask.assignedUsers().isEmpty()
-                        ? existingTask.getAssignedUsers()
-                        : userService.getUsersByIds(updatedTask.assignedUsers()))
-                .build();
+        existingTask.setTitle(updatedTask.title());
+        existingTask.setDescription(updatedTask.description());
+        existingTask.setStatus(updatedTask.status() != null ? updatedTask.status() : TaskStatus.SUBMITTED);
+        existingTask.setDeadline(updatedTask.deadline());
 
-
-        if (!updatedTask.assignedUsers().isEmpty()) {
-            List<User> assignedUsers = userService.getUsersByIds(updatedTask.assignedUsers());
-            existingTask.setAssignedUsers(assignedUsers);
+        if (updatedTask.assignedUsers() != null) {
+            if (updatedTask.assignedUsers().isEmpty()) {
+                existingTask.getAssignedUsers().clear();
+            } else {
+                List<User> assignedUsers = userService.getUsersByIds(updatedTask.assignedUsers());
+                existingTask.setAssignedUsers(assignedUsers);
+            }
         }
 
         return existingTask;
