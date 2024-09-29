@@ -6,7 +6,6 @@ import jakarta.persistence.criteria.Root;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.pgorecki.zadanie2.model.User;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;
@@ -43,7 +42,7 @@ public class SearchCriteriaConsumer implements Consumer<SearchCriteria> {
                         "%" + searchCriteria.getValue().toString().toLowerCase() + "%"));
             } else if (r.get(searchCriteria.getKey()).getJavaType() == LocalDate.class) {
                 predicate = builder.and(predicate, builder.equal(
-                        r.get(searchCriteria.getKey()), (LocalDate) searchCriteria.getValue()));
+                        r.get(searchCriteria.getKey()), searchCriteria.getValue()));
             } else {
                 predicate = builder.and(predicate, builder.equal(
                         r.get(searchCriteria.getKey()), searchCriteria.getValue()));
