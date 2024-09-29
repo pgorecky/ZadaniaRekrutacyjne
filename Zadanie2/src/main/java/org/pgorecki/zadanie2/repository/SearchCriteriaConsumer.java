@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.pgorecki.zadanie2.model.User;
 
+import java.time.LocalDate;
 import java.util.function.Consumer;
 
 @AllArgsConstructor
@@ -16,20 +17,33 @@ import java.util.function.Consumer;
 public class SearchCriteriaConsumer implements Consumer<SearchCriteria> {
     private Predicate predicate;
     private CriteriaBuilder builder;
-    private Root<User> r;
+    private Root<?> r;
     @Override
     public void accept(SearchCriteria searchCriteria) {
         if (searchCriteria.getOperation().equalsIgnoreCase(">")) {
-            predicate = builder.and(predicate, builder
-                    .greaterThanOrEqualTo(r.get(searchCriteria.getKey()), searchCriteria.getValue().toString()));
+            if (r.get(searchCriteria.getKey()).getJavaType() == LocalDate.class) {
+                predicate = builder.and(predicate, builder.greaterThanOrEqualTo(
+                        r.get(searchCriteria.getKey()), (LocalDate) searchCriteria.getValue()));
+            } else {
+                predicate = builder.and(predicate, builder.greaterThanOrEqualTo(
+                        r.get(searchCriteria.getKey()), searchCriteria.getValue().toString()));
+            }
         } else if (searchCriteria.getOperation().equalsIgnoreCase("<")) {
-            predicate = builder.and(predicate, builder.lessThanOrEqualTo(
-                    r.get(searchCriteria.getKey()), searchCriteria.getValue().toString()));
+            if (r.get(searchCriteria.getKey()).getJavaType() == LocalDate.class) {
+                predicate = builder.and(predicate, builder.lessThanOrEqualTo(
+                        r.get(searchCriteria.getKey()), (LocalDate) searchCriteria.getValue()));
+            } else {
+                predicate = builder.and(predicate, builder.lessThanOrEqualTo(
+                        r.get(searchCriteria.getKey()), searchCriteria.getValue().toString()));
+            }
         } else if (searchCriteria.getOperation().equalsIgnoreCase(":")) {
             if (r.get(searchCriteria.getKey()).getJavaType() == String.class) {
                 predicate = builder.and(predicate, builder.like(
                         builder.lower(r.get(searchCriteria.getKey())),
                         "%" + searchCriteria.getValue().toString().toLowerCase() + "%"));
+            } else if (r.get(searchCriteria.getKey()).getJavaType() == LocalDate.class) {
+                predicate = builder.and(predicate, builder.equal(
+                        r.get(searchCriteria.getKey()), (LocalDate) searchCriteria.getValue()));
             } else {
                 predicate = builder.and(predicate, builder.equal(
                         r.get(searchCriteria.getKey()), searchCriteria.getValue()));
