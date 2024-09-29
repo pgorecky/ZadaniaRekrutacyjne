@@ -3,7 +3,9 @@ package org.pgorecki.zadanie2.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.pgorecki.zadanie2.dto.AddTaskRequest;
+import org.pgorecki.zadanie2.dto.TaskDto;
 import org.pgorecki.zadanie2.model.Task;
 import org.pgorecki.zadanie2.service.TaskService;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,11 @@ import java.net.URI;
 @RequestMapping("/api/tasks")
 public class TaskController {
     private final TaskService taskService;
+    private final ModelMapper modelMapper;
+
+    private TaskDto convertToTaskDto(Task task) {
+        return modelMapper.map(task, TaskDto.class);
+    }
 
     @PostMapping
     @ResponseBody
@@ -35,7 +42,8 @@ public class TaskController {
     @GetMapping("/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public Task getTaskInformation(@PathVariable Long id) {
-        return taskService.getTaskById(id);
+    public TaskDto getTaskInformation(@PathVariable Long id) {
+        Task task = taskService.getTaskById(id);
+        return convertToTaskDto(task);
     }
 }
