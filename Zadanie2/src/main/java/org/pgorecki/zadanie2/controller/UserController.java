@@ -30,4 +30,13 @@ public class UserController {
                 .buildAndExpand(createdUser.getId())
                 .toUri();
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        log.warn("User with id: {} has been removed", id);
+        return String.format("User with id: %s deleted successfully", id);
+    }
 }

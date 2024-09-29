@@ -1,6 +1,7 @@
 package org.pgorecki.zadanie2.service;
 
 import lombok.RequiredArgsConstructor;
+import org.pgorecki.zadanie2.exception.UserNotFoundException;
 import org.pgorecki.zadanie2.model.User;
 import org.pgorecki.zadanie2.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -12,5 +13,12 @@ public class UserService {
 
     public User createUser(User user) {
         return userRepository.save(user);
+    }
+
+    public void deleteUser(Long id) {
+        User userToDelete = userRepository
+                .findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        userRepository.deleteById(userToDelete.getId());
     }
 }
