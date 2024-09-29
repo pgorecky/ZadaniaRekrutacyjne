@@ -3,6 +3,8 @@ package org.pgorecki.zadanie2.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.pgorecki.zadanie2.dto.UserDto;
 import org.pgorecki.zadanie2.model.User;
 import org.pgorecki.zadanie2.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,11 @@ import java.net.URI;
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
+    private final ModelMapper modelMapper;
+
+    private UserDto convertToUserDto(User user) {
+        return modelMapper.map(user, UserDto.class);
+    }
 
     @PostMapping
     @ResponseBody
@@ -38,5 +45,13 @@ public class UserController {
         userService.deleteUser(id);
         log.warn("User with id: {} has been removed", id);
         return String.format("User with id: %s deleted successfully", id);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto getUserInformation(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        return convertToUserDto(user);
     }
 }
