@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -30,4 +33,8 @@ public class User {
     @Column(unique = true)
     @Email(message = "Email should be valid")
     private String email;
+
+    @Column(name = "date_created")
+    @CreationTimestamp
+    private LocalDateTime dateCreated;
 }
