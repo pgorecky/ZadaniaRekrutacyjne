@@ -6,6 +6,8 @@ import org.pgorecki.zadanie2.model.User;
 import org.pgorecki.zadanie2.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -26,5 +28,9 @@ public class UserService {
         return userRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", id));
+    }
+
+    public List<User> getUsersByIds(List<Long> userIds) {
+        return userRepository.findAllById(userIds);
     }
 }
