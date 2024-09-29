@@ -1,14 +1,18 @@
 package org.pgorecki.zadanie2.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.pgorecki.zadanie2.model.User;
+import org.pgorecki.zadanie2.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -23,6 +27,11 @@ public class UserControllerTests {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    private String userId;
 
     private User createUserRequest() {
         return User.builder()
@@ -41,7 +50,6 @@ public class UserControllerTests {
     }
 
     @BeforeEach
-    @Test
     void shouldSuccessfullyCreateUser() throws Exception {
         User addUserRequest = createUserRequest();
 
@@ -54,7 +62,7 @@ public class UserControllerTests {
                 .andExpect(status().isCreated());
 
         //check if user is successfully created
-        mockMvc.perform(MockMvcRequestBuilders
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/users/all")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -63,14 +71,24 @@ public class UserControllerTests {
                 .andExpect(jsonPath("$[0].firstName", is(addUserRequest.getFirstName())))
                 .andExpect(jsonPath("$[0].firstName", is(addUserRequest.getFirstName())))
                 .andExpect(jsonPath("$[0].lastName", is(addUserRequest.getLastName())))
-                .andExpect(jsonPath("$[0].email", is(addUserRequest.getEmail())));
+                .andExpect(jsonPath("$[0].email", is(addUserRequest.getEmail())))
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString();
+        JsonNode rootNode = objectMapper.readTree(jsonResponse);
+        userId = String.valueOf(rootNode.get(0).get("id"));
+    }
+
+    @AfterEach
+    void cleanAfterTest() {
+        userRepository.deleteAll();
     }
 
     @Test
     void shouldSuccessfullyDeleteUser() throws Exception {
         //delete user
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/api/users/1")
+                        .delete("/api/users/" + userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
