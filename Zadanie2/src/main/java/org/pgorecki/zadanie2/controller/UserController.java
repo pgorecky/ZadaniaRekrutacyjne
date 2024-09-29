@@ -6,12 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.pgorecki.zadanie2.dto.UserDto;
 import org.pgorecki.zadanie2.model.User;
+import org.pgorecki.zadanie2.repository.UserSearchDao;
+import org.pgorecki.zadanie2.repository.UserSearchRequest;
 import org.pgorecki.zadanie2.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,6 +22,7 @@ import java.net.URI;
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
+    private final UserSearchDao userSearchDao;
     private final ModelMapper modelMapper;
 
     private UserDto convertToUserDto(User user) {
@@ -53,5 +57,22 @@ public class UserController {
     public UserDto getUserInformation(@PathVariable Long id) {
         User user = userService.getUserById(id);
         return convertToUserDto(user);
+    }
+
+    @GetMapping("/all")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserDto> getAllUsers(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String email
+    ) {
+        UserSearchRequest userSearchRequest = new UserSearchRequest(firstName, lastName, email);
+
+        List<User> users = userSearchDao.findByCriteria(userSearchRequest.getCriteriaParams());
+
+        return users.stream()
+                .map(this::convertToUserDto)
+                .toList();
     }
 }
