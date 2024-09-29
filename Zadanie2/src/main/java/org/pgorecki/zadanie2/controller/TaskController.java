@@ -46,4 +46,13 @@ public class TaskController {
         Task task = taskService.getTaskById(id);
         return convertToTaskDto(task);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteTask(@PathVariable Long id) {
+        taskService.deleteTaskById(id);
+        log.warn("Task with id: {} has been removed", id);
+        return String.format("Task with id: %s deleted successfully", id);
+    }
 }
