@@ -24,6 +24,7 @@ public class Task {
     @NotBlank(message = "Title should not be blank")
     private String title;
 
+    @NotBlank(message = "Description should not be blank")
     private String description;
 
     @Enumerated(EnumType.STRING)
