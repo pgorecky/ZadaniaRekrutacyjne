@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {ConfigProvider, theme} from "antd";
 import CreateTaskPage from "./pages/CreateTaskPage";
+import CreateUserPage from "./pages/CreateUserPage";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
             {
                 path: '/task/create',
                 element: <CreateTaskPage/>
+            },
+            {
+                path: '/user/add',
+                element: <CreateUserPage/>
             }
         ]
     }

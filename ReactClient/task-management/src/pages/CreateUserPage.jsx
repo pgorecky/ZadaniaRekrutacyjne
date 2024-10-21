@@ -1,15 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
     Alert,
     Button,
-    DatePicker,
     Form,
     Input,
-    Select,
-} from 'antd';
-import {getRequest, postRequest} from "../service/API_CONFIG";
 
-const {Option} = Select;
+} from 'antd';
+import {postRequest} from "../service/API_CONFIG";
 const formItemLayout = {
     labelCol: {
         xs: {
@@ -28,55 +25,39 @@ const formItemLayout = {
         },
     },
 };
-const CreateTaskPage = () => {
+const CreateUserPage = () => {
     const [componentVariant, setComponentVariant] = useState('filled');
-    const [users, setUsers] = useState([])
     const [successMessage, setSuccessMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
     const onFormVariantChange = ({variant}) => {
         setComponentVariant(variant);
     };
 
-    const options = [];
-
-    useEffect(() => {
-        getRequest('/users/all').then(r => {
-            setUsers(r.data)
-        });
-
-    }, []);
-
-    users.map(user => {
-        options.push({
-            label: `${user.firstName} ${user.lastName}`,
-            value: user.id
-        })
-    });
-
     function submitForm(values) {
-        const formattedValues = {
-            ...values,
-            deadline: values.deadline ? values.deadline.format('YYYY-MM-DD') : null
-        };
 
-        console.log(formattedValues);
-        postRequest('/tasks', formattedValues)
+        console.log(values);
+        postRequest('/users', values)
             .then(() => {
-                setSuccessMessage('Successfully created task');
+                setSuccessMessage('Successfully added user');
             })
             .catch(error => {
                 if (error.response && error.response.data) {
-                    const title = error.response.data.title || "";
-                    const description = error.response.data.description || "";
+                    const firstname = error.response.data.firstName || "";
+                    const lastname = error.response.data.lastName || "";
+                    const email = error.response.data.email || "";
 
-                    setErrorMessage(`${title}, ${description}`);
+                    setErrorMessage(`${firstname}, ${lastname}, ${email}`);
+
+                    if (error.response.status === 409) {
+                        setErrorMessage("Email already exists");
+                    }
                 }
             });
     }
 
     return (
         <>
-            <h1 style={{color: '#F48668'}}>Create a new task</h1>
+            <h1 style={{color: '#F48668'}}>Add a new user</h1>
             <Form
                 {...formItemLayout}
                 onValuesChange={onFormVariantChange}
@@ -92,76 +73,46 @@ const CreateTaskPage = () => {
             >
 
                 <Form.Item
-                    label="Title"
-                    name="title"
+                    label="First Name"
+                    name="firstName"
                     rules={[
                         {
                             required: true,
-                            message: 'Please input task title!',
+                            message: 'Please input first name!',
                         },
                     ]}
                 >
-                    <Input placeholder="Please input title"/>
+                    <Input placeholder="First Name"/>
                 </Form.Item>
 
                 <Form.Item
-                    label="Description"
-                    name="description"
+                    label="Last Name"
+                    name="lastName"
                     rules={[
                         {
                             required: true,
-                            message: 'Describe the content of the task!',
+                            message: 'Please input last name!',
                         },
                     ]}
                 >
-                    <Input.TextArea placeholder="Please input description"/>
+                    <Input placeholder="Last Name"/>
                 </Form.Item>
 
                 <Form.Item
-                    label="Status"
-                    name="status"
+                    name="email"
+                    label="E-mail"
                     rules={[
+                        {
+                            type: 'email',
+                            message: 'The input is not valid E-mail!',
+                        },
                         {
                             required: true,
-                            message: 'Please input status!',
+                            message: 'Please input your E-mail!',
                         },
                     ]}
                 >
-                    <Select placeholder="Set actual status">
-                        <Option value="SUBMITTED">Submitted</Option>
-                        <Option value="IN_PROGRESS">In Progress</Option>
-                        <Option value="REOPENED">Reopened</Option>
-                        <Option value="Done">Done</Option>
-                    </Select>
-                </Form.Item>
-
-                <Form.Item
-                    label="Assigned users"
-                    name="assignedUsers"
-                    rules={[
-                        {
-                            required: false,
-                        },
-                    ]}
-                >
-                    <Select
-                        placeholder="Assign users"
-                        mode="multiple"
-                        options={options}>
-                    </Select>
-                </Form.Item>
-
-                <Form.Item
-                    label="Deadline"
-                    name="deadline"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please deadline!',
-                        },
-                    ]}
-                >
-                    <DatePicker/>
+                    <Input placeholder="Input user e-mail"/>
                 </Form.Item>
 
                 <Form.Item
@@ -171,7 +122,7 @@ const CreateTaskPage = () => {
                     }}
                 >
                     <Button type="primary" htmlType="submit" onClick={submitForm}>
-                        Create
+                        Add
                     </Button>
                 </Form.Item>
                 {successMessage && (
@@ -186,7 +137,7 @@ const CreateTaskPage = () => {
                 )}
                 {errorMessage && (
                     <Alert
-                        message="Failure to create task"
+                        message="Failure to add user"
                         description={errorMessage}
                         type="error"
                         showIcon
@@ -199,4 +150,4 @@ const CreateTaskPage = () => {
     );
 };
 
-export default CreateTaskPage
+export default CreateUserPage
