@@ -8,6 +8,7 @@ import {ConfigProvider, theme} from "antd";
 import CreateTaskPage from "./pages/CreateTaskPage";
 import CreateUserPage from "./pages/CreateUserPage";
 import TasksPage from "./pages/TasksPage";
+import UsersPage from "./pages/UsersPage";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
             {
                 path: '/task/all',
                 element: <TasksPage/>
+            },
+            {
+                path: '/user/all',
+                element: <UsersPage/>
             }
         ]
     }

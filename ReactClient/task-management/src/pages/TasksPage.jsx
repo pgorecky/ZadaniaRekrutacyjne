@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {getRequest} from "../service/API_CONFIG";
 import {Avatar, Button, Collapse, DatePicker, Form, Input, Progress, Row, Select, Space, Tooltip} from "antd";
 import axios from "axios";
+import getRandomPastelColor, {getInitials} from "../utils/Utils";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
@@ -33,18 +34,6 @@ const TasksPage = () => {
                 return <Progress percent={100} size="small"/>
         }
     }
-    const getRandomPastelColor = () => {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 6)];
-        }
-        return color;
-    };
-
-    const getInitials = (firstName, lastName) => {
-        return (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
-    };
 
     const getAssignedUsers = (assignedUsers) => {
         return assignedUsers.map(user => {
@@ -210,9 +199,8 @@ const TasksPage = () => {
                     </Space>
                 </div>
             </Row>
-
         </Form>
-        <Collapse style={{minWidth: 1000}} items={items} defaultActiveKey={['1']} onChange={onChange}/>;
+        <Collapse style={{minWidth: 1000}} items={items} onChange={onChange}/>;
     </>
 }
 
