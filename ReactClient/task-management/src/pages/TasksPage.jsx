@@ -25,7 +25,6 @@ const {RangePicker} = DatePicker;
 const TasksPage = () => {
     const [tasks, setTasks] = useState([])
     const [form] = Form.useForm();
-    const [items, setItems] = useState([]);
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -119,39 +118,36 @@ const TasksPage = () => {
         </Dropdown>
     );
 
-    tasks.map(task => {
-        items.push({
-            key: task.id,
-            label: task.title,
-            children: (
-                <>
-                    <p>{task.description}</p>
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "space-around",
-                        }}
-                    >
-                        <p>Deadline: {`${task.deadline[0]}-${String(task.deadline[1]).padStart(2, '0')}-${String(task.deadline[2]).padStart(2, '0')}`}</p>
-                        <div>
-                            <p>Status: {task.status} </p>
-                            {getProgressBar(task.status)}
-                        </div>
-                        <div>
-                            <p>Assigned Users:</p>
-                            <Avatar.Group>
-                                <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1"/>
-                                {getAssignedUsers(task.assignedUsers)}
-                            </Avatar.Group>
-                        </div>
+    const items = tasks.map((task) => ({
+        key: task.id,
+        label: task.title,
+        children: (
+            <>
+                <p>{task.description}</p>
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-around",
+                    }}
+                >
+                    <p>Deadline: {`${task.deadline[0]}-${String(task.deadline[1]).padStart(2, "0")}-${String(task.deadline[2]).padStart(2, "0")}`}</p>
+                    <div>
+                        <p>Status: {task.status} </p>
+                        {getProgressBar(task.status)}
                     </div>
-                </>
-            ),
-            extra: genExtra(task.id), // Dodano extra z poprawnym dropdownem
-        });
-    });
+                    <div>
+                        <p>Assigned Users:</p>
+                        <Avatar.Group>
+                            {getAssignedUsers(task.assignedUsers)}
+                        </Avatar.Group>
+                    </div>
+                </div>
+            </>
+        ),
+        extra: genExtra(task.id),
+    }));
 
     const getFields = () => {
         const children = [];
@@ -242,7 +238,7 @@ const TasksPage = () => {
                 }
             });
             console.log(response.data);
-            setItems([])
+            // setItems([])
             setTasks(response.data)
         } catch (error) {
             console.error('Błąd:', error);
