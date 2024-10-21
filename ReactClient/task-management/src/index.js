@@ -9,6 +9,7 @@ import CreateTaskPage from "./pages/CreateTaskPage";
 import CreateUserPage from "./pages/CreateUserPage";
 import TasksPage from "./pages/TasksPage";
 import UsersPage from "./pages/UsersPage";
+import UserPage from "./pages/UserPage";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
             {
                 path: '/user/all',
                 element: <UsersPage/>
+            },
+            {
+                path: '/user/:id',
+                element: <UserPage/>
             }
         ]
     }

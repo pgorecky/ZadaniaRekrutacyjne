@@ -140,6 +140,7 @@ const TasksPage = () => {
                     <div>
                         <p>Assigned Users:</p>
                         <Avatar.Group>
+                            <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1"/>
                             {getAssignedUsers(task.assignedUsers)}
                         </Avatar.Group>
                     </div>
