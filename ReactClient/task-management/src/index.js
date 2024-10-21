@@ -7,6 +7,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {ConfigProvider, theme} from "antd";
 import CreateTaskPage from "./pages/CreateTaskPage";
 import CreateUserPage from "./pages/CreateUserPage";
+import TasksPage from "./pages/TasksPage";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
             {
                 path: '/user/add',
                 element: <CreateUserPage/>
+            },
+            {
+                path: '/task/all',
+                element: <TasksPage/>
             }
         ]
     }

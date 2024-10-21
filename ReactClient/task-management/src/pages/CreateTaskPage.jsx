@@ -131,7 +131,7 @@ const CreateTaskPage = () => {
                         <Option value="SUBMITTED">Submitted</Option>
                         <Option value="IN_PROGRESS">In Progress</Option>
                         <Option value="REOPENED">Reopened</Option>
-                        <Option value="Done">Done</Option>
+                        <Option value="DONE">Done</Option>
                     </Select>
                 </Form.Item>
 

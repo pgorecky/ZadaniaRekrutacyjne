@@ -33,9 +33,11 @@ VALUES ('Patryk', 'Gorecki', 'patryk.gorecky@gmail.com'),
 INSERT INTO tasks (title, description, status, deadline)
 VALUES ('Stworzyć serwer', 'Stworzyć serwer obsługujący REST API na zajęcia z programowania rozproszonego', 'DONE', '2024-12-01'),
        ('Client React', 'Wykonać klienta API z wykorzystaniem Reacta na zajęcia', 'IN_PROGRESS', '2024-12-01'),
-       ('Client numer 2', 'Stworzyć drugiego klienta z użyciem innej technologii', 'SUBMITTED', '2024-12-01');
+       ('Client numer 2', 'Stworzyć drugiego klienta z użyciem innej technologii', 'SUBMITTED', '2024-12-01'),
+       ('Stworzyć dokumentację', 'Opisać utworzony projekt', 'REOPENED', '2024-12-01');
 
 INSERT INTO task_users (task_id, user_id)
 VALUES (1, 1),
        (2, 1),
-       (3, 1);
+       (3, 1),
+       (4, 1);
