@@ -1,8 +1,23 @@
 import React, {useEffect, useState} from "react";
-import {getRequest} from "../service/API_CONFIG";
-import {Avatar, Button, Collapse, DatePicker, Form, Input, Progress, Row, Select, Space, Tooltip} from "antd";
+import {deleteRequest, getRequest} from "../service/API_CONFIG";
+import {
+    Avatar,
+    Button,
+    Collapse,
+    DatePicker,
+    Dropdown,
+    Form,
+    Input, Menu, message, Popconfirm,
+    Progress,
+    Row,
+    Select,
+    Space,
+    Tooltip
+} from "antd";
 import axios from "axios";
 import getRandomPastelColor, {getInitials} from "../utils/Utils";
+import {DeleteOutlined, EditOutlined, MoreOutlined} from "@ant-design/icons";
+import {useNavigate} from "react-router-dom";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
@@ -11,6 +26,7 @@ const TasksPage = () => {
     const [tasks, setTasks] = useState([])
     const [form] = Form.useForm();
     const [items, setItems] = useState([]);
+    const navigate = useNavigate()
 
     useEffect(() => {
         getRequest('/tasks/all').then(r => {
@@ -50,19 +66,74 @@ const TasksPage = () => {
         });
     };
 
+    const handleEditClick = (id) => {
+        navigate(`/task/${id}`)
+    }
+
+    const fetchTasks = async () => {
+        try {
+            const response = await getRequest('/tasks/all');
+            setTasks(response.data);
+        } catch (error) {
+            console.error('Błąd podczas pobierania tasków:', error);
+        }
+    };
+
+    const confirm = async (id) => {
+        try {
+            await deleteRequest(`/tasks/${id}`);
+            message.success('Task deleted');
+            await fetchTasks();
+        } catch (error) {
+            console.error('Błąd podczas usuwania taska:', error);
+            message.error('Nie udało się usunąć zadania.');
+        }
+    };
+    const cancel = (e) => {
+        console.log(e);
+    };
+
+    const dropdownMenu = (id) => (
+        <Menu>
+            <Menu.Item key="1" icon={<EditOutlined/>} onClick={() => handleEditClick(id)}>
+                Edit
+            </Menu.Item>
+            <Menu.Item key="2" icon={<DeleteOutlined/>} danger>
+                <Popconfirm
+                    title="Delete the task"
+                    description="Are you sure to delete this task?"
+                    onConfirm={() => confirm(id)}
+                    onCancel={cancel}
+                    okText="Yes"
+                    cancelText="No"
+                >
+                    Delete
+                </Popconfirm>
+            </Menu.Item>
+        </Menu>
+    );
+
+    const genExtra = (taskId) => (
+        <Dropdown overlay={() => dropdownMenu(taskId)} trigger={['click']}>
+            <MoreOutlined/>
+        </Dropdown>
+    );
+
     tasks.map(task => {
         items.push({
             key: task.id,
             label: task.title,
-            children:
+            children: (
                 <>
                     <p>{task.description}</p>
-                    <div style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-around"
-                    }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-around",
+                        }}
+                    >
                         <p>Deadline: {`${task.deadline[0]}-${String(task.deadline[1]).padStart(2, '0')}-${String(task.deadline[2]).padStart(2, '0')}`}</p>
                         <div>
                             <p>Status: {task.status} </p>
@@ -76,10 +147,11 @@ const TasksPage = () => {
                             </Avatar.Group>
                         </div>
                     </div>
-                </>,
-
-        })
-    })
+                </>
+            ),
+            extra: genExtra(task.id), // Dodano extra z poprawnym dropdownem
+        });
+    });
 
     const getFields = () => {
         const children = [];
@@ -200,7 +272,10 @@ const TasksPage = () => {
                 </div>
             </Row>
         </Form>
-        <Collapse style={{minWidth: 1000}} items={items} onChange={onChange}/>;
+        <Collapse style={{minWidth: 1000}}
+                  onChange={onChange}
+                  items={items}
+        />
     </>
 }
 

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {deleteRequest, getRequest} from "../service/API_CONFIG";
 import Meta from "antd/es/card/Meta";
-import {Avatar, Button, Card, Col, Form, Input, message, Popconfirm, Row, Select, Space, Tooltip} from "antd";
-import {CloseOutlined, EditOutlined, EllipsisOutlined, SettingOutlined} from "@ant-design/icons";
+import {Avatar, Button, Card, Col, Form, Input, message, Popconfirm, Row, Space, Tooltip} from "antd";
+import {CloseOutlined, EditOutlined} from "@ant-design/icons";
 import getRandomPastelColor, {getInitials} from "../utils/Utils";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -103,7 +103,7 @@ const UsersPage = () => {
         try {
             await deleteRequest(`/users/${id}`);
             message.success('User deleted');
-            fetchUsers();
+            await fetchUsers();
         } catch (error) {
             console.error('Błąd podczas usuwania użytkownika:', error);
             message.error('Nie udało się usunąć użytkownika.');
@@ -111,7 +111,6 @@ const UsersPage = () => {
     };
     const cancel = (e) => {
         console.log(e);
-        message.error('Click on No');
     };
 
     return <>
