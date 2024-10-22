@@ -28,7 +28,7 @@ const EditUserPage = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const {id} = useParams();
-    const [form] = Form.useForm();  // Dodanie hooka Form.useForm()
+    const [form] = Form.useForm();
 
     const onFormVariantChange = ({variant}) => {
         setComponentVariant(variant);
@@ -37,7 +37,7 @@ const EditUserPage = () => {
     useEffect(() => {
         getRequest(`/users/${id}`)
             .then(r => {
-                form.setFieldsValue({  // Ustawienie wartości formularza po pobraniu danych
+                form.setFieldsValue({
                     firstName: r.data.firstName,
                     lastName: r.data.lastName,
                     email: r.data.email
