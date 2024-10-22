@@ -114,6 +114,7 @@ const UsersPage = () => {
     };
 
     return <>
+        <h1 style={{color: '#F48668'}}>Users</h1>
         <Form form={form} name="advanced_search" onFinish={onSearch}>
             <Row gutter={24}>{getFields()}
                 <div
@@ -136,7 +137,7 @@ const UsersPage = () => {
                 </div>
             </Row>
         </Form>
-        <Row wrap={true} style={{maxWidth: 1200}} gutter={[16,16]}>
+        <Row wrap={true} style={{maxWidth: 1200}} gutter={[16, 16]}>
             {users.map(user => (
                 <Col key={user.id}>
                     <Card
@@ -159,7 +160,7 @@ const UsersPage = () => {
                                 okText="Yes"
                                 cancelText="No"
                             >
-                                <CloseOutlined key="delete" style={{ color: '#FF6962' }} />
+                                <CloseOutlined key="delete" style={{color: '#FF6962'}}/>
                             </Popconfirm>
                         ]}
                     >

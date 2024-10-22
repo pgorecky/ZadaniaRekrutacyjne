@@ -239,7 +239,6 @@ const TasksPage = () => {
                 }
             });
             console.log(response.data);
-            // setItems([])
             setTasks(response.data)
         } catch (error) {
             console.error('Błąd:', error);
@@ -247,6 +246,7 @@ const TasksPage = () => {
     }
 
     return <>
+        <h1 style={{color: '#F48668'}}>Tasks</h1>
         <Form form={form} name="advanced_search" onFinish={onSearch}>
             <Row gutter={24}>{getFields()}
                 <div

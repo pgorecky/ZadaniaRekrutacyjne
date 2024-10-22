@@ -1,4 +1,4 @@
-import {Badge, Descriptions} from "antd";
+import {Descriptions} from "antd";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getRequest} from "../service/API_CONFIG";
@@ -17,7 +17,7 @@ const UserPage = () => {
                 setLastName(r.data.lastName)
                 setEmail(r.data.email)
             })
-    }, []);
+    }, [id]);
 
     return <>
         <Descriptions title="User Info" bordered layout={'horizontal'} column={1}>
