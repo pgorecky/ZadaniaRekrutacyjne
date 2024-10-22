@@ -1,8 +1,9 @@
 import {Avatar, Badge, Descriptions, Progress, Tooltip} from "antd";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {getRequest} from "../service/API_CONFIG";
 import getRandomPastelColor, {getInitials} from "../utils/Utils";
+import {EditOutlined} from "@ant-design/icons";
 
 const TaskPage = () => {
     const {id} = useParams();
@@ -11,6 +12,7 @@ const TaskPage = () => {
     const [status, setStatus] = useState('')
     const [deadline, setDeadline] = useState([])
     const [assignedUsers, setAssignedUsers] = useState([])
+    const navigate = useNavigate()
 
     useEffect(() => {
         getRequest(`/tasks/${id}`)
@@ -50,7 +52,12 @@ const TaskPage = () => {
         });
     };
 
-    return <>
+    return <div style={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "start",
+        justifyContent: "start"
+    }}>
         <Descriptions title="Task Info" bordered layout={'horizontal'} column={1} style={{minWidth: 400, maxWidth: 800}}>
             <Descriptions.Item label="Title">{title}</Descriptions.Item>
             <Descriptions.Item label="Description">{description}</Descriptions.Item>
@@ -63,7 +70,8 @@ const TaskPage = () => {
                 </Avatar.Group>
             </Descriptions.Item>
         </Descriptions>
-    </>
+        <EditOutlined style={{fontSize: '1.5rem', color: "gray", cursor: "pointer"}} onClick={() => navigate(`/task/${id}/edit`)}/>
+    </div>
 }
 
 export default TaskPage
