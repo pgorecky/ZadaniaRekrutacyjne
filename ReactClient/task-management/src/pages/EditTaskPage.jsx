@@ -1,4 +1,4 @@
-import {getRequest, postRequest} from "../service/API_CONFIG";
+import {getRequest} from "../service/API_CONFIG";
 import {Alert, Button, DatePicker, Form, Input, Select} from "antd";
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";

@@ -33,4 +33,15 @@ public class UserService {
     public List<User> getUsersByIds(List<Long> userIds) {
         return userRepository.findAllById(userIds);
     }
+
+    public User updateUser(Long id, User updatedUser) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", id));
+
+        existingUser.setFirstName(updatedUser.getFirstName());
+        existingUser.setLastName(updatedUser.getLastName());
+        existingUser.setEmail(updatedUser.getEmail());
+
+        return userRepository.save(existingUser);
+    }
 }

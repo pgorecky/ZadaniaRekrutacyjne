@@ -75,4 +75,15 @@ public class UserController {
                 .map(this::convertToUserDto)
                 .toList();
     }
+
+    @PutMapping("/{id}")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto updateUser(@PathVariable Long id, @Valid @RequestBody User updatedUser) {
+        User user = userService.updateUser(id, updatedUser);
+
+        log.info("User with id: {} has been updated", id);
+        return convertToUserDto(user);
+    }
+
 }
